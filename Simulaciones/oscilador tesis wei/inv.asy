@@ -1,0 +1,24 @@
+Version 4
+SymbolType BLOCK
+LINE Normal 0 48 0 -48
+LINE Normal 96 0 0 48
+LINE Normal 0 -48 96 0
+LINE Normal -33 0 0 0
+LINE Normal 128 0 104 0
+LINE Normal 32 -64 32 -32
+LINE Normal 32 64 32 32
+CIRCLE Normal 104 -4 96 4
+WINDOW 0 8 -1 Left 0
+SYMATTR Prefix X
+PIN -32 0 TOP 8
+PINATTR PinName IN
+PINATTR SpiceOrder 3
+PIN 128 0 TOP 8
+PINATTR PinName OUT
+PINATTR SpiceOrder 4
+PIN 32 -64 LEFT 8
+PINATTR PinName +
+PINATTR SpiceOrder 2
+PIN 32 64 LEFT 8
+PINATTR PinName -
+PINATTR SpiceOrder 1

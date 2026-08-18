@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "logos") (type "KiCad") (uri "C:/uba/Microbalanzas/Circuitos - PCBs/Circuitos - PCBs/Librerias/logos.pretty") (options "") (descr ""))
+)

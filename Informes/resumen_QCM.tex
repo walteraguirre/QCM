@@ -1,0 +1,224 @@
+\documentclass{article}
+
+%------------------------- Carga de paquetes ---------------------------
+%
+% Si no necesitás algún paquete, comentalo.
+%
+
+%
+% Definición del tamaño de página y los márgenes:
+%
+\usepackage[a4paper,headheight=16pt,
+            top=2.0cm,
+            bottom=2.0cm,
+            left=1.8cm,
+            right=1.8cm]{geometry}
+
+%\usepackage{caption}
+%\usepackage{subcaption}
+
+\usepackage{float}
+
+\usepackage{wrapfig}
+
+%
+% Vamos a escribir en castellano:
+%
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{adjustbox}
+
+%\usepackage{pythontex}
+\usepackage{pdfpages}
+\usepackage{circuitikz}
+
+\usepackage{multicol}
+
+\usepackage{multirow}
+
+%\usepackage{apacite} % O apacite si no lo tienes instalado, o natbib con opciones APA
+%\usepackage{url}
+%\bibliographystyle{apacite}
+%\bibliography{refs}
+
+%
+% Si preferís el tipo de letra Helvetica (Arial), descomentá las siguientes
+% dos lineas (las fórmulas seguirán estando en Times):
+%
+%\usepackage{helvet}
+%\renewcommand\familydefault{\sfdefault}
+
+%
+% El paquete amsmath agrega algunas funcionalidades extra a las fórmulas. 
+% Además defino la numeración de las tablas y figuras al estilo "Figura 2.3", 
+% en lugar de "Figura 7". (Por lo tanto, aunque no uses fórmulas, si querés
+% este tipo de numeración dejá el paquete amsmath descomentado).
+%
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%
+% Para tener cabecera y pie de página con un estilo personalizado:
+%
+\usepackage{fancyhdr}
+
+% Graficos
+\usepackage{graphicx}
+
+%Hipervinculos
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=cyan
+    }
+%
+% Para poner el texto "Figura X" en negrita:
+% (Si no tenés el paquete 'caption2', probá con 'caption').
+%
+\usepackage[hang,bf]{caption}
+
+% Para enumerar con letras
+\usepackage[shortlabels]{enumitem}
+
+% Para unidades
+\usepackage{siunitx}
+\DeclareSIUnit\division{div}
+\sisetup{output-decimal-marker = {,}}
+
+%
+% Todas las imágenes están en el directorio includes:
+%
+\newcommand{\imgdir}{includes}
+\graphicspath{{\imgdir/}}
+
+\usepackage[capitalize, nameinlink, spanish]{cleveref}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+\usepackage{float}
+
+\usepackage[indent]{parskip}
+
+\usepackage{textcomp}
+\usepackage{gensymb}
+
+
+
+
+\begin{document}
+
+    \renewcommand{\listtablename}{Índice de tablas}
+    \renewcommand{\tablename}{Tabla}
+
+    
+	
+	%
+	% Hago que en la cabecera de página se muestre a la derecha la sección,
+	% y en el pie, en número de página a la derecha:
+	%
+	\pagestyle{fancy}
+	\renewcommand{\sectionmark}[1]{\markboth{}{\thesection\ \ #1}}
+	\lhead{}
+	\chead{}
+	\rhead{\rightmark}
+	\lfoot{}
+	\cfoot{}
+	\rfoot{\thepage}
+
+
+\pagenumbering{arabic}
+\thispagestyle{empty}
+
+\begin{titlepage}
+    \centering
+    
+    % Logo
+    \vspace*{1.5cm}
+    \includegraphics[width=3.5cm]{fiuba.pdf}
+    
+    \vspace{1.5cm}
+    
+    % Universidad
+    \Large\textsc{Universidad de Buenos Aires}\\
+    \Large\textsc{Facultad de Ingeniería}
+    
+    \vspace{1cm}
+    
+    \large\textsc{(86.54) Redes Neuronales}
+    
+    \vfill
+    
+    % Título
+    {\Huge\bfseries
+    Monitor de Espesor de Películas \\
+    Delgadas basado en Microbalanza de \\
+    Cristal de Cuarzo
+    }
+    
+    \vfill
+    
+    % Fecha
+    \large Mayo 2026
+    
+    \vspace{1.5cm}
+    
+    % Datos del alumno
+    \begin{tabular}{rl}
+        \textbf{Alumno:} & Aguirre Walter Mario \\
+        \textbf{Padrón:} & 106328 \\
+        \textbf{Correo:} & waguirre@fi.uba.ar \\
+    \end{tabular}
+    
+    \vspace*{1cm}
+    
+\end{titlepage}
+
+
+\tableofcontents
+ 
+\newpage
+
+
+\section{Introducción}
+
+El desarrollo de películas delgadas constituye un elemento clave en múltiples áreas de la ingeniería y la ciencia de materiales, particularmente en aplicaciones donde se requiere un control preciso de las propiedades físicas en escalas micrométricas o nanométricas. En procesos de deposición, como la ablación láser pulsada (\textit{Pulsed Laser Deposition}, PLD), la capacidad de medir y controlar el espesor de las películas en tiempo real resulta fundamental para garantizar la reproducibilidad y calidad de los resultados experimentales.
+
+En este contexto, la microbalanza de cristal de cuarzo (\textit{Quartz Crystal Microbalance}, QCM) se presenta como una herramienta ampliamente utilizada para el monitoreo \textit{in situ} de masa y espesor durante procesos de deposición. Su principio de funcionamiento se basa en la variación de la frecuencia de resonancia de un cristal de cuarzo cuando se deposita masa sobre su superficie, lo que permite, mediante la ecuación de Sauerbrey, estimar la masa por unidad de área y, a partir de ella, el espesor de la película.
+
+Sin embargo, los sistemas comerciales de monitoreo de espesor suelen presentar costos elevados, lo que limita su disponibilidad en entornos de investigación con recursos restringidos. En este sentido, el presente trabajo propone el diseño y desarrollo de un monitor de espesor de bajo costo basado en QCM y electrónica embebida, capaz de integrarse a una cámara de PLD y de realizar mediciones en tiempo real con resolución y estabilidad adecuadas.
+
+El desarrollo de este sistema se enmarca en el proyecto UBACyT orientado al diseño y fabricación de motores eléctricos de alta eficiencia con núcleos ferromagnéticos avanzados. En particular, se busca habilitar la síntesis reproducible de películas magnéticas delgadas que puedan ser utilizadas como núcleos en estatores de micromotores de flujo axial con tecnología PCB. En este tipo de dispositivos, el control del espesor y de las propiedades del material depositado resulta determinante para el desempeño electromagnético del sistema.
+
+De este modo, el presente trabajo no solo aborda el desarrollo de instrumentación experimental de bajo costo, sino que también contribuye a una línea de investigación más amplia orientada a la integración de materiales avanzados en arquitecturas de motores eléctricos miniaturizados.
+
+\end{document}
