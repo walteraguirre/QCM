@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     # Tiempo de gate: se mantiene en 10 ms para tener buena resolución de medición.
     # (100 mediciones/seg internamente, aunque después solo guardemos 1 por segundo)
-    GATE_TIME = PIO_FREQ // 100  # 10 ms
+    GATE_TIME = PIO_FREQ   # 10 ms
 
     # ── Configuración del logueo a archivo ─────────────────────────────────────
     DURACION_TOTAL_S      = 60      # duración total de la prueba (segundos)

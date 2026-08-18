@@ -83,7 +83,8 @@ class QCMWindow(QMainWindow):
 
         self.reader  = None
         self.signals = SerialSignals()
-        self.dual    = False
+        self.dual     = False
+        self.use_temp = False
 
         # Buffers de datos
         self.t_data    = deque(maxlen=MAX_POINTS)
@@ -136,11 +137,20 @@ class QCMWindow(QMainWindow):
         ctrl_layout.addSpacing(20)
 
         # Modo de medición
-        ctrl_layout.addWidget(QLabel("Modo:"))
+        ctrl_layout.addWidget(QLabel("Cristales:"))
         self.mode_combo = QComboBox()
         self.mode_combo.addItems(["1 cristal  (solo sensor)", "2 cristales (sensor + referencia)"])
         self.mode_combo.setMinimumWidth(220)
         ctrl_layout.addWidget(self.mode_combo)
+
+        ctrl_layout.addSpacing(10)
+
+        # Termistor
+        ctrl_layout.addWidget(QLabel("Termistor:"))
+        self.temp_combo = QComboBox()
+        self.temp_combo.addItems(["Sin termistor", "Con termistor (NTC 100kΩ)"])
+        self.temp_combo.setMinimumWidth(180)
+        ctrl_layout.addWidget(self.temp_combo)
 
         ctrl_layout.addSpacing(20)
 
@@ -272,12 +282,17 @@ class QCMWindow(QMainWindow):
     # ── Inicio / stop de medición ─────────────────────────────────────────────
     def _toggle_measurement(self):
         if self.btn_start.text().startswith("▶"):
-            # Limpiar datos anteriores
             self.t_data.clear(); self.fs_data.clear()
             self.fr_data.clear(); self.df_data.clear()
+            self.temp_data.clear()
 
-            self.dual = (self.mode_combo.currentIndex() == 1)
-            cmd = "START_2" if self.dual else "START_1"
+            self.dual    = (self.mode_combo.currentIndex() == 1)
+            self.use_temp = (self.temp_combo.currentIndex() == 1)
+
+            canal = "2" if self.dual else "1"
+            therm = "TEMP" if self.use_temp else "NTEMP"
+            cmd   = f"START_{canal}_{therm}"
+
             self.reader.send(cmd)
             self._set_measuring(True)
         else:
@@ -292,6 +307,7 @@ class QCMWindow(QMainWindow):
                 QPushButton:hover { background:#e8305a; }
             """)
             self.mode_combo.setEnabled(False)
+            self.temp_combo.setEnabled(False)
             self.plot_timer.start()
         else:
             self.btn_start.setText("▶  Iniciar medición")
@@ -301,27 +317,39 @@ class QCMWindow(QMainWindow):
                 QPushButton:disabled { background:#45475a; color:#6c7086; }
             """)
             self.mode_combo.setEnabled(True)
+            self.temp_combo.setEnabled(True)
             self.plot_timer.stop()
 
     # ── Datos entrantes ───────────────────────────────────────────────────────
     def _on_data(self, line):
         parts = line.split(",")
         try:
-            if not self.dual and len(parts) == 3:
-                # timestamp_s, f_sensor, temp_c
-                ts, fs, temp = float(parts[0]), float(parts[1]), float(parts[2])
-                self.t_data.append(ts)
-                self.fs_data.append(fs)
-                self.temp_data.append(temp)
+            if not self.dual and not self.use_temp and len(parts) == 2:
+                # timestamp_s, f_sensor
+                self.t_data.append(float(parts[0]))
+                self.fs_data.append(float(parts[1]))
 
-            elif self.dual and len(parts) == 5:
+            elif not self.dual and self.use_temp and len(parts) == 3:
+                # timestamp_s, f_sensor, temp_c
+                self.t_data.append(float(parts[0]))
+                self.fs_data.append(float(parts[1]))
+                self.temp_data.append(float(parts[2]))
+
+            elif self.dual and not self.use_temp and len(parts) == 4:
+                # timestamp_s, f_sensor, f_ref, delta_f
+                self.t_data.append(float(parts[0]))
+                self.fs_data.append(float(parts[1]))
+                self.fr_data.append(float(parts[2]))
+                self.df_data.append(float(parts[3]))
+
+            elif self.dual and self.use_temp and len(parts) == 5:
                 # timestamp_s, f_sensor, f_ref, delta_f, temp_c
-                ts, fs, fr, df, temp = (float(x) for x in parts)
-                self.t_data.append(ts)
-                self.fs_data.append(fs)
-                self.fr_data.append(fr)
-                self.df_data.append(df)
-                self.temp_data.append(temp)
+                self.t_data.append(float(parts[0]))
+                self.fs_data.append(float(parts[1]))
+                self.fr_data.append(float(parts[2]))
+                self.df_data.append(float(parts[3]))
+                self.temp_data.append(float(parts[4]))
+
         except ValueError:
             pass
 
@@ -348,9 +376,12 @@ class QCMWindow(QMainWindow):
             self.lbl_fr[1].setText("—")
             self.lbl_df[1].setText("—")
 
-        # Temperatura — siempre visible independientemente del modo
+        # Temperatura — solo si está habilitada
         temp = list(self.temp_data)
-        self.lbl_temp[1].setText(f"{temp[-1]:.2f} °C" if temp else "—")
+        if self.use_temp and temp:
+            self.lbl_temp[1].setText(f"{temp[-1]:.2f} °C")
+        else:
+            self.lbl_temp[1].setText("—")
 
     def closeEvent(self, event):
         if self.reader:
