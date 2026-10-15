@@ -146,7 +146,7 @@
       },
       "rules": {
         "max_error": 0.005,
-        "min_clearance": 0.5,
+        "min_clearance": 0.3,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
@@ -211,7 +211,8 @@
       ],
       "track_widths": [
         0.0,
-        0.8
+        0.8,
+        1.0
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
@@ -538,7 +539,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "./",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -674,7 +675,7 @@
         "uuid": "dfad13c2-faaa-45d6-bb2d-e35e2fde0779"
       }
     ],
-    "used_designators": "U1-3,A1,#PWR1-11,C1-6,R1-7,J2-5",
+    "used_designators": "J9,C1-2",
     "variants": []
   },
   "sheets": [

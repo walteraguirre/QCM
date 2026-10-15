@@ -1,0 +1,6 @@
+# QCM Vacuum Thermal Characterization
+# Date=2026-09-29 13:41:13
+# Crystal=1
+# Thermistors=2
+# Frequency may be empty when QCM signal is unavailable
+timestamp_s,f_sensor_hz,temp_1_c,temp_2_c
